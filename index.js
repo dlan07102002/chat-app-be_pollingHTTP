@@ -11,7 +11,8 @@ const users = [
         password: 'lan',
     }
 ];
-const messages = []
+const messages = [];
+
 
 function makeid(length) {
     let result = '';
@@ -75,6 +76,7 @@ app.post('/auth/login', (req, res) => {
             message: 'Unauthenticated'
         })
     }
+    console.log(user.username)
     return res.json({
         data: {
             id: user.id,
@@ -87,17 +89,21 @@ app.post('/auth/login', (req, res) => {
 app.post('/messages', (req, res) => {
     const body = req.body;
     console.log(body)
+    console.log(users)
     const user = users.find(user => user.id === body.userId)
+    // console.log(user)
     if(!user){
         return res.status(401).json({
             message: 'Unauthenticated.'
         })
     }
     const newMessage = {
+        user: user.username,
         content: body.content,
         userId: body.userId
     }
     messages.push(newMessage)
+    // console.log(messages)
     return res.json({
         data: newMessage
     })
